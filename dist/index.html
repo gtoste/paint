@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paint</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main>
+        <canvas id="canvas"></canvas>
+        <div class="options">
+            <button type="button" id="options_download"><img src="./assets/download.png"></button>
+            <button type="button" id="options_clear"><img src="./assets/delete.png"></button>
+            <button type="button" id="options_previous"><img src="./assets/previous.png"></button>
+
+            <button type="button" id="options_color_red" class="selected"><div class="color" style="background-color: red;"></div></button>
+            <button type="button" id="options_color_blue"><div class="color" style="background-color: blue;"></div></button>
+            <button type="button" id="options_color_green"><div class="color" style="background-color: green;"></div></button>
+            <button type="button" id="options_color_yellow"><div class="color" style="background-color: yellow;"></div></button>
+
+            <button type="button"><input type="color" id="color_picker"></button>
+
+            <button type="button" id="options_brush"><img src="./assets/paint-brush.png"></button>
+            <button type="button" id="options_rectangle"><img src="./assets/rectangle.png"></button>
+            <button type="button" id="options_circle"><img src="./assets/circle.png"></button>
+            <button type="button" id="options_line"><img src="./assets/minus.png"></button>
+
+            <button type="button" id="options_proportions">Zachowaj proporcje figur</button>
+            <button type="button" id="options_fill">Wypełnij</button>
+
+        </div>
+        
+    </main>
+    <script src="bundle.js"></script>
+</body>
+</html>
