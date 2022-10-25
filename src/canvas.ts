@@ -3,6 +3,7 @@ import Brush from "./Brush";
 import { Position } from "./Position";
 import Shape from "./Shape";
 import Clear from "./Clear";
+import Rectangle from "./Rectangle";
 
 export class Canvas {
     private canvas : HTMLCanvasElement;
@@ -14,17 +15,22 @@ export class Canvas {
     private r : number;
     private color : string;
     private last_pos : Position;
+    private current_pos : Position;
 
     constructor(canvas : HTMLCanvasElement) {
         this.canvas = canvas;
         this.ctx = canvas.getContext("2d");
+        
         this.resize();
-        document.body.onresize = this.resize;
+        //TODO!!!
+        document.body.onresize = ()=>{this.resize(); this.redo()}
 
         this.color = "red";
         this.r = 10;
         this.last_pos = null;
         this.history = []
+
+       
 
         canvas.onmousedown = (es)=>{
           this.bindDraw(es);
@@ -69,17 +75,32 @@ export class Canvas {
         break;
 
         case Mode.rectangle:
-          let rect = null;
           this.last_pos = this.getMousePos(ev);
           this.canvas.onmousemove = (me) =>{
-            let pos = this.getMousePos(me)
+            let pos = this.getMousePos(me);
             this.draw(this.last_pos, pos);
+            this.current_pos = pos;
+          }
+        break;
+
+        case Mode.circle:
+          this.last_pos = this.getMousePos(ev);
+          this.canvas.onmousemove = (me) =>{
+            let pos = this.getMousePos(me);
+            this.draw(this.last_pos, pos);
+            this.current_pos = pos;
           }
         break;
       }
     }
 
     private unbindDraw(){
+      if(this.mode == Mode.rectangle){
+        let rect = new Rectangle(this.ctx, this.color, this.last_pos, this.current_pos, this.fill);
+        this.history.push(rect);
+      }
+    
+      
       this.canvas.onmousemove = null; 
       this.last_pos = null;
     }
@@ -97,10 +118,33 @@ export class Canvas {
         break;
 
         case Mode.rectangle:
+         
+          this.redo();
           this.ctx.beginPath();
           this.ctx.strokeStyle = this.color;
-          this.ctx.rect(last_pos.x, last_pos.y, pos.x - last_pos.x, pos.y - last_pos.y);
-          this.ctx.stroke();
+        
+
+          let width = pos.x - last_pos.x;
+          let height = pos.y - last_pos.y;
+          if(this.proportions) height = width > height ? width : height; width = height;
+          if(this.fill) 
+          {
+            this.ctx.fillStyle = this.color;
+            this.ctx.fillRect(last_pos.x, last_pos.y, width, height)
+          }else{
+            this.ctx.rect(last_pos.x, last_pos.y, width, height)
+            this.ctx.stroke();
+          }
+          
+        break;
+
+        case Mode.circle:
+          this.redo();
+          this.ctx.beginPath();
+          let xc = (pos.x - last_pos.x) / 2;
+          let yc = (pos.y - last_pos.y) / 2;
+          this.ctx.arc(pos.x + xc, pos.y + yc, xc, 0, 2 * Math.PI);
+          this.ctx.stroke(); 
         break;
       }
     }
@@ -119,6 +163,18 @@ export class Canvas {
       this.ctx.clearRect(0,0,width, 9/16 * width);
 
       this.history.pop();
+      for(let i = 0; i < this.history.length; i++)
+      {
+        let obj = this.history[i];
+        obj.draw();
+      }
+    }
+
+    public redo()
+    {
+      let width = document.body.offsetWidth;
+      this.ctx.clearRect(0,0,width, 9/16 * width);
+
       for(let i = 0; i < this.history.length; i++)
       {
         let obj = this.history[i];
