@@ -1,3 +1,6 @@
+import { Canvas } from "./canvas";
+import { Mode } from "./Mode";
+
 //init
 const canvas : HTMLCanvasElement = <HTMLCanvasElement>document.getElementById("canvas");
 
@@ -14,5 +17,42 @@ const option_brush : HTMLButtonElement = <HTMLButtonElement>document.getElementB
 const option_rectangle : HTMLButtonElement = <HTMLButtonElement>document.getElementById("options_rectangle");
 const option_circle : HTMLButtonElement = <HTMLButtonElement>document.getElementById("options_circle");
 const option_line : HTMLButtonElement = <HTMLButtonElement>document.getElementById("options_line");
-const option_proportions : HTMLButtonElement = <HTMLButtonElement>document.getElementById("options_propotions");
+const option_proportions : HTMLButtonElement = <HTMLButtonElement>document.getElementById("options_proportions");
 const option_fill : HTMLButtonElement = <HTMLButtonElement>document.getElementById("options_fill");
+
+
+
+let c = new Canvas(canvas);
+
+let currently_selected_color : HTMLElement = option_color_red;
+let currently_selected_mode : HTMLButtonElement = option_brush;
+option_color_red.classList.add("selected");
+option_brush.classList.add("selected");
+
+const select_color = (color : string, csc : HTMLElement)=>
+{
+    c.setColor(color);
+    currently_selected_color.classList.remove("selected");
+    csc.classList.add("selected");
+    currently_selected_color = csc;
+}
+
+const select_mode = (mode : Mode, csm : HTMLButtonElement) =>{
+    c.setMode(mode);
+    currently_selected_mode.classList.remove("selected");
+    csm.classList.add("selected");
+    currently_selected_mode = csm;
+}
+
+option_color_red.onclick = () =>{ select_color("red", option_color_red)}
+option_color_blue.onclick = () =>{select_color("blue", option_color_blue)}
+option_color_green.onclick = () =>{select_color("green", option_color_green)}
+option_color_yellow.onclick = () =>{select_color("yellow", option_color_yellow)}
+color_picker.onclick = () =>{select_color(color_picker.value, color_picker.parentElement)}
+
+option_brush.onclick = () => {select_mode(Mode.brush, option_brush)}
+option_rectangle.onclick = () => {select_mode(Mode.rectangle, option_rectangle)}
+option_circle.onclick = () => {select_mode(Mode.circle, option_circle)}
+option_line.onclick = () => {select_mode(Mode.line, option_line)}
+option_proportions.onclick = ()=>{c.getProportions() ? option_proportions.classList.remove("selected") : option_proportions.classList.add("selected"); c.setProportions();}
+option_fill.onclick = ()=>{c.getFill() ? option_fill.classList.remove("selected") : option_fill.classList.add("selected"); c.setFill();}
