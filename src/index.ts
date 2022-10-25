@@ -56,3 +56,8 @@ option_circle.onclick = () => {select_mode(Mode.circle, option_circle)}
 option_line.onclick = () => {select_mode(Mode.line, option_line)}
 option_proportions.onclick = ()=>{c.getProportions() ? option_proportions.classList.remove("selected") : option_proportions.classList.add("selected"); c.setProportions();}
 option_fill.onclick = ()=>{c.getFill() ? option_fill.classList.remove("selected") : option_fill.classList.add("selected"); c.setFill();}
+
+
+option_previous.onclick = ()=>{ c.undo(); }
+
+option_clear.onclick = () => {c.clear(); }
