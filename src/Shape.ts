@@ -1,3 +1,3 @@
 export default interface Shape{
-    draw() : void;
+    draw(scale?: number) : void;
 }

@@ -1,5 +1,5 @@
 import Shape from "./Shape";
 export default class Clear implements Shape{
-    draw(){
+    draw(scale = 1){
     }
 }

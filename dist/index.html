@@ -9,7 +9,11 @@
 </head>
 <body>
     <main>
-        <canvas id="canvas"></canvas>
+        <div class="container">
+            <canvas id="canvas"></canvas>
+            <canvas id="mask"></canvas>
+        </div>
+        
         <div class="options">
             <button type="button" id="options_download"><img src="./assets/download.png"></button>
             <button type="button" id="options_clear"><img src="./assets/delete.png"></button>
@@ -29,7 +33,7 @@
 
             <button type="button" id="options_proportions">Zachowaj proporcje figur</button>
             <button type="button" id="options_fill">Wypełnij</button>
-
+            <button disabled type="button"><input type="range" id="range" min="1" max="40"></button>
         </div>
         
     </main>
